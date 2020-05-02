@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+    var usersRes = ViewBag.Users;
+    bool esCache = ViewBag.EsCache;
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy. REDIS!!!!!!!!!!</p>
+<p>
+    Pagina : @usersRes.Page
+    <br />
+    Por Pagina: @usersRes.PerPage
+    <br />
+    Total: @usersRes.Total
+    <br />
+    <strong>Es obtenido desde cache: @(esCache?"si":"no")</strong>
+</p>
+<table>
+    @foreach (var item in usersRes.Data)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Email</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td><img src="@item.Avatar" /></td>
+        </tr>
+    }
+</table>
