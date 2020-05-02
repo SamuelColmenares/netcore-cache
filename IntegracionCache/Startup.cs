@@ -27,7 +27,7 @@ namespace IntegracionCache
             services.AddMemoryCache();
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "cursonetcoresam.redis.cache.windows.net:6380,password=Pl2RFGFl7hTWk6D8v52e7CgBSryXfiuUf4VQlfm3bDM=,ssl=True,abortConnect=False";
+                options.Configuration = "<<colocar aqui key primary stackExchenge.Redis de Azure>>";
             });
         }
 
