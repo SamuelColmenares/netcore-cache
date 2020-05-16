@@ -11,6 +11,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace IntegracionCache.Controllers
 {
@@ -20,12 +21,14 @@ namespace IntegracionCache.Controllers
         private readonly IMemoryCache _cache;
         private readonly IDistributedCache _redisCache;
         const string USERKEY = "users";
+        private readonly ConfigKeys _config;
 
-        public HomeController(ILogger<HomeController> logger, IMemoryCache cacheMemoria, IDistributedCache redis)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache cacheMemoria, IDistributedCache redis, IOptions<ConfigKeys> config)
         {
             _logger = logger;
             _cache = cacheMemoria;
             _redisCache = redis;
+            _config = config.Value;
         }
 
         public async Task<IActionResult> Index()
@@ -35,10 +38,11 @@ namespace IntegracionCache.Controllers
 
             if (!_cache.TryGetValue(USERKEY, out UserResponse result))
             {
+                
                 esCache = false;
                 using (var httpClient = new HttpClient())
                 {
-                    string apiResult = await httpClient.GetStringAsync("https://reqres.in/api/users?page=2");
+                    string apiResult = await httpClient.GetStringAsync(_config.ReqresUrl2);
                     result = JsonConvert.DeserializeObject<UserResponse>(apiResult);
 
                     if (result != null)
@@ -77,7 +81,7 @@ namespace IntegracionCache.Controllers
                 esCache = false;
                 using (var httpClient = new HttpClient())
                 {
-                    string apiResult = await httpClient.GetStringAsync("https://reqres.in/api/users?page=1");
+                    string apiResult = await httpClient.GetStringAsync(_config.ReqresUrl1);
                     result = JsonConvert.DeserializeObject<UserResponse>(apiResult);
 
                     if (result != null)

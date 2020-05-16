@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IntegracionCache.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,10 +25,11 @@ namespace IntegracionCache
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.Configure<ConfigKeys>(Configuration.GetSection("ConfigKeys"));
             services.AddMemoryCache();
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "<<colocar aqui key primary stackExchenge.Redis de Azure>>";
+                options.Configuration = Configuration["LlaveRedis"];
             });
         }
 
